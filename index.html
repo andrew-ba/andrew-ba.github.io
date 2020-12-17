@@ -13110,9 +13110,9 @@ div#notebook {
 <h1 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">&#182;</a></h1><p>Baseball has become an incredibly data driven sport in recent times. Sabermetrics, a term for <a href="https://sabr.org/sabermetrics">"the search for objective knowledge about baseball," coined by Bill James</a> began this revolutionizing of the way the game was looked at in the 1980s. Since then, we have seen this approach reach the uppermost level of baseball competition: MLB.</p>
 <p>The most famous example of this manifestation was the 2002 Oakland A's (perhaps you have heard of <a href="https://en.wikipedia.org/wiki/Moneyball_(film">Moneyball...</a>)), who based thier approach to assembling a team under heavy financial constraints on statistics instead of subjective scout evaluation. Today we see teams like the Los Angeles Dodgers and the Tampa Bay Rays taking very analytically driven approaches to thier teams and decisions, and having impressive success, and outdoing the Moneyball A's in terms of monetarily constrained success in the case of the latter.</p>
 <h1 id="Data-Science-&amp;-Baseball">Data Science &amp; Baseball<a class="anchor-link" href="#Data-Science-&amp;-Baseball">&#182;</a></h1><p>As mentioned above, statistics, analysis, and data science have made themselves a central part of baseball in the past few decades. Models that can predict and analyze results are extraordinarily useful to the front offices of MLB teams when they are trying to piece together a winning team.</p>
-<p>This project will investigate the correlations between team batting and pitching statistics and team success, and develop a model to attempt to predict team success based on those statistics. We will utilize SciKit Learn's linear and logistic regression features to accomplish this.</p>
+<p>This project will investigate the correlations between team batting and pitching statistics and team success, and develop a model to attempt to predict team success based on those statistics. We will utilize SciKit Learn's linear and logistic regression features to accomplish this, as well as pandas to store our data. Information about <a href="https://scikit-learn.org/stable/">sckit-learn</a> and <a href="https://pandas.pydata.org/docs/getting_started/index.html">pandas</a> can be found at those respective hyperlinks. For more information about linear regression, consider <a href="https://towardsdatascience.com/linear-regression-detailed-view-ea73175f6e86">this article</a>, and for logistic regression consider <a href="https://towardsdatascience.com/introduction-to-logistic-regression-66248243c148">this one</a>.</p>
 <h1 id="Gathering-and-Processing-the-data">Gathering and Processing the data<a class="anchor-link" href="#Gathering-and-Processing-the-data">&#182;</a></h1><p>First we have to obtain the data we intend to examine. For this project, we will be using <a href="http://www.seanlahman.com/baseball-archive/statistics/">Lahman's Baseball Database</a>, an SQLite database and query the necessary data about pitching and batting. We will first extract basic statistics and counts <em>per team</em>, like hits, homeruns, strikeouts, innnings pitched, etc. We will be focusing on data post-integration (1947).</p>
-<p>After we query the SQLite table, some cleaning of the data needs to be done. Since the stats for intentional walks (IBB) and sacrifice flies (SF) were not always tracked, we have to replace those missing values in the data with something, and in this case I have chosen zero. We can accomplish this using pandas' fillna() function on the respective columns of the dataframe.</p>
+<p>After we query the <a href="https://docs.python.org/3/library/sqlite3.html">SQLite</a> table, some cleaning of the data needs to be done. Since the stats for intentional walks (IBB) and sacrifice flies (SF) were not always tracked, we have to replace those missing values in the data with something, and in this case I have chosen zero. We can accomplish this using pandas' fillna() function on the respective columns of the dataframe.</p>
 <h4 id="NOTE:-You-would-need-to-download-Lahman's-database-and-later-the-csv-files-from-BBRef-(they-are-not-large)-to-recreate-these-results.-The-necessary-links-are-given.-You-will-need-to-place-these-files-in-the-directory-that-you-are-running-this-notebook-from,-as-well-as-either-renaming-them-to-match-the-names-I-used,-or-changing-the-target-file-name-in-the-code-where-necessary.">NOTE: You would need to download Lahman's database and later the csv files from BBRef (they are not large) to recreate these results. The necessary links are given. You will need to place these files in the directory that you are running this notebook from, as well as either renaming them to match the names I used, or changing the target file name in the code where necessary.<a class="anchor-link" href="#NOTE:-You-would-need-to-download-Lahman's-database-and-later-the-csv-files-from-BBRef-(they-are-not-large)-to-recreate-these-results.-The-necessary-links-are-given.-You-will-need-to-place-these-files-in-the-directory-that-you-are-running-this-notebook-from,-as-well-as-either-renaming-them-to-match-the-names-I-used,-or-changing-the-target-file-name-in-the-code-where-necessary.">&#182;</a></h4>
 </div>
 </div>
@@ -13348,7 +13348,7 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The pitching table also features numbers on a by-player basis, so some need to be summed or averaged, as above.</p>
-<p>We will also calculate the <a href="https://www.baseball-reference.com/leaders/earned_run_avg_career.shtml">earned run average</a>, which is a statistic that shows how many runs per nine innings (length of a standard baseball game) that the pitching staff of a team has given up on average, and is generally used as an indicator of the quality of a pitcher or entire staff. Lastly we calculate WHIP <a href="http://m.mlb.com/glossary/standard-stats/walks-and-hits-per-inning-pitched#:~:text=WHIP%20is%20one%20of%20the,by%20his%20total%20innings%20pitched.">(Walks and Hits per Inning Pitched)</a>, which is a statistic that measures how many baserunners per inning a pitcher allows. The lower the WHIP, the better.</p>
+<p>We will also calculate the <a href="https://www.baseball-reference.com/leaders/earned_run_avg_career.shtml">earned run average</a>, which is a statistic that shows how many runs per nine innings (length of a standard baseball game) that the pitching staff of a team has given up on average, and is generally used as an indicator of the quality of a pitcher or entire staff. Lastly we calculate WHIP <a href="http://m.mlb.com/glossary/standard-stats/walks-and-hits-per-inning-pitched#:~:text=WHIP%20is%20one%20of%20the,by%20his%20total%20innings%20pitched.">(Walks and Hits per Inning Pitched)</a>, which is a statistic that measures how many baserunners per inning a pitcher allows. The lower, the better in both cases.</p>
 <p>Once again these formulas are given here, respectively:</p>
 <h1><center>$\textrm{ERA} = \frac{\textrm{total earned runs}}{\textrm{total innings pitched}}$</center></h1><h1><center>$\textrm{WHIP} = \frac{\textrm{H } + \textrm{ BB }}{\textrm{IP}}$</center></h1><p>We calculate these using the same method as avg and OBP from above, but of course using the different formulas and values. We also fill missing values in the GIDP column with zeros.</p>
 
@@ -13711,8 +13711,8 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Lastly for data collection and processing, we will gather data from the teams table of the database which outlines the teams' success in any given year. In particular we are obtaining the wins, losses, the teams' finishing place in their divisions, if the team won thier league, and if the team won the World Series that year. League wins, World Series wins, and division place are data that are consistently tracked since integration, making them useful for us.</p>
-<p>Below we query the teams table for the data described above, then convert the LgWin and WSWin columns to booleans, and then turn the teamRank column into a boolean column describing if the team finished in the top two in thier respective division. We will consider a top-two finish a success for this project, as the early rounds of the playoffs we have in the modern MLB Postseason (Wildcard, Division Series, and League Championship Series) were not always present, and are missing from data in this table prior to thier introduction.</p>
+<p>Lastly for data collection and processing, we will gather data from the teams table of the database, which outlines the teams' success in any given year. In particular we are obtaining the wins, losses, the teams' finishing place in their divisions, if the team won thier league, and if the team won the World Series that year. League wins, World Series wins, and division place are data that are consistently tracked since integration, making them useful for us.</p>
+<p>Below we query the teams table for the data described above, then convert the LgWin and WSWin columns to booleans, and then turn the teamRank column into a boolean column describing if the team finished in the top two in thier respective division. We will consider a top-two finish a success for this project, as the early rounds of the playoffs we have in the modern MLB Postseason (Wildcard, Division Series, and League Championship Series) were not always present, and are missing from data in this table prior to thier introductions in more recent years.</p>
 
 </div>
 </div>
@@ -14794,7 +14794,7 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The line plot shows that the high placing teams' ERA are generally any way between .25 and .75 runs lower than the lower placing teams', with some outliers on either end. Now that we have an understanding of some trends in the data we can move on to model creation.</p>
-<h1 id="Model-Creation">Model Creation<a class="anchor-link" href="#Model-Creation">&#182;</a></h1><h2 id="Trying-to-predict-wins">Trying to predict wins<a class="anchor-link" href="#Trying-to-predict-wins">&#182;</a></h2><p>Now we will move on to doing something with this data! First we will create a linear regression model that predicts the amount of wins a team will have based on their team on base percentage.</p>
+<h1 id="Model-Creation">Model Creation<a class="anchor-link" href="#Model-Creation">&#182;</a></h1><h2 id="Trying-to-predict-wins">Trying to predict wins<a class="anchor-link" href="#Trying-to-predict-wins">&#182;</a></h2><p>Now we will move on to doing something with this data! First we will create a linear regression model using sklearn that predicts the amount of wins a team will have based on their team on base percentage.</p>
 
 </div>
 </div>
@@ -15113,14 +15113,14 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The above printed value is the accuracy of our Logistic Regression model. We can see that the logistic regression classifier was more successful in predicting than either of our previous linear models, but was still not super accurate. We should take this accuracy number with a grain of salt however, since the large majority of the values the model is trying to predict <em>are</em> false, so it would be very easy for the model to "luck" into a good set of predictions.</p>
-<p>Now we will fit the same type of model on the pitching data.|</p>
+<p>Now we will fit the same type of model on the pitching data:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pitching_log_x</span> <span class="o">=</span> <span class="n">pitching</span><span class="p">[[</span><span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="s1">&#39;ER&#39;</span><span class="p">,</span> <span class="s1">&#39;HR&#39;</span><span class="p">,</span> <span class="s1">&#39;BB&#39;</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;BAA&#39;</span><span class="p">,</span> <span class="s1">&#39;ERA&#39;</span><span class="p">,</span> <span class="s1">&#39;WHIP&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
@@ -15161,8 +15161,7 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>As the above numbers show, a logistic regression classifier based on pitching numbers was as innacurate as the batting model.</p>
-<p>With both of these models being disappointing, let's try something else: creating a model based on BOTH pitching and batting data.</p>
-<p>In the cell below, we create a new dataframe that contains the data from both the batting and dataframes that we used to create the above models. Prior to that we have to rename some of hte columns in the pitching dataframe that we want to keep separate, because they have duplicate names. Following that cell, we fit a logistic regression classifier to this combined data.</p>
+<p>With both of these models being disappointing, let's try something else: creating a model based on BOTH pitching and batting data. In the cell below, we create a new dataframe that contains the data from both the batting and dataframes that we used to create the above models. Prior to that we have to rename some of the columns in the pitching dataframe that we want to keep separate, because they have duplicate names (for example, we need both batting hits and pitching hits, which are labeled as H in thier respective tables). Following that cell, we fit a logistic regression classifier to this combined data.</p>
 
 </div>
 </div>
@@ -15422,7 +15421,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Wow! This linear regression classifier is <em>far</em> more accurate than either previous log model. The model's accuracy, reported by the score function of sklearn's logistic regression classifier method, was nearly 85%. Now that we've seen how accurate this logistic regression model was, let's create a linear regression model based on the same input data, but that models the number of wins a team got:</p>
+<p>Wow! This logistic regression classifier is <em>far</em> more accurate than either previous log model. The model's accuracy, reported by the score function of sklearn's logistic regression classifier method, was nearly 85%. Now that we've seen how accurate this logistic regression model was, let's create a linear regression model based on the same input data, but that models the number of wins a team got:</p>
 
 </div>
 </div>
@@ -15603,8 +15602,8 @@ div#notebook {
 <h2 id="Testing-our-model-on-the-2020-season's-data">Testing our model on the 2020 season's data<a class="anchor-link" href="#Testing-our-model-on-the-2020-season's-data">&#182;</a></h2><p>Now that we have a model that was accurate on the 1947-2019 data, lets apply our model to the 2020 season's data. The 2020 season data was taken from <a href="https://www.baseball-reference.com/leagues/MLB/2020.shtml">Baseball Reference</a>, an <em>excellent</em> resource for baseball statistics.</p>
 <p>One problem we run into with the 2020 season's data is that the 2020 season was short, with the league only playing 60 (or less in some cases) games due to the scheduled start of the season being delayed due to the 'beginning' of the COVID-19 pandemic in March, which interrupted Spring Training. To get a <em>very</em> rough estimate of counting statistics like hit or homerun totals, we can extrapolate them as if they were from a 162 game season by multiplying them by 2.7 (60 * 2.7 = 162). This way they are more compatible with our model. We are going to leave rate statistics like batting average, OBP, and ERA they way they are, since they are rate statistics and do not need scaling.</p>
 <p>Another issue is that we will now get win totals that are being predicted as if a full season was played. To get a statistic concerning wins that is comparable across different length seasons we can use win percentage, which is calculated by:</p>
-<h1><center>$\textrm{win_pct} = \frac{\textrm{wins}}{\textrm{games played}}$</center></h1><p>Conveniently, the data we are using from BBRef already has the real life win percentage calculated for us.</p>
-<p>First we must obtain the data, which I downloaded from BBRef in comma separated value (csv) format, which pandas supports. Starting with the pitching data from the 2020 season, we need to calculate batting average against as it is not given. For this data we are using: <h1><center>$\textrm{BAA} = \frac{\textrm{H}}{\textrm{batters faced} - \textrm{BB } - \textrm{ IBB } - \textrm{ HBP}}$</center></h1>
+<h1><center>$\textrm{win_pct} = \frac{\textrm{wins}}{\textrm{games played}}$</center></h1><p>Conveniently, the data we are using from Baseball Reference already has the real life win percentage calculated for us.</p>
+<p>First we must obtain the data, which I downloaded from Baseball Reference in comma separated value (csv) format, which pandas supports. Starting with the pitching data from the 2020 season, we need to calculate batting average against as it is not given. For this data we are using: <h1><center>$\textrm{BAA} = \frac{\textrm{H}}{\textrm{batters faced} - \textrm{BB } - \textrm{ IBB } - \textrm{ HBP}}$</center></h1>
 which is imperfect since this data does not include sacrifice hits, sacrifice flies, or catcher's interference data, which <a href="https://en.wikipedia.org/wiki/Batting_average_against">this formula</a> includes. We will just use and rename the loss column in this data to store BAA since we will not need it later at all.</p>
 
 </div>
@@ -15681,7 +15680,7 @@ which is imperfect since this data does not include sacrifice hits, sacrifice fl
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now that we have pitching and batting data, we need to combine them into one dataframe which we can feed to our model. After we do this we can apply our rough extrapolation to the counting stats that the model uses to predict wins.</p>
+<p>Now that we have pitching and batting data, we need to combine them into one dataframe which we can feed to our model. To do this we use the pandas function 'concat,' which adds the columns of the pitching dataframe (that do not overlap) on the right of the columns in the batting dataframe. After we do this we can apply our rough extrapolation to the counting stats that the model uses to predict wins.</p>
 
 </div>
 </div>
@@ -15902,7 +15901,7 @@ which is imperfect since this data does not include sacrifice hits, sacrifice fl
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now that we have data that was roughly extrapolated for a full length season, we can create our input vector, and see how the model fairs. We need the predicted wins to be represented as win percentage to be comparable across the 60 and 162 game seasons, so we iterate through each row and calculate that as well. This formula is the same as above: wins over games played.</p>
+<p>Now that we have data that was roughly extrapolated for a full length season, we can create our input vector in the same form as we used to create the linear model earlier, and see how the model fairs. We need the predicted wins to be represented as win percentage to be comparable across the 60 and 162 game seasons, so we iterate through each row and calculate that as well. This formula is the same as above: wins over games played.</p>
 
 </div>
 </div>
@@ -16173,9 +16172,9 @@ which is imperfect since this data does not include sacrifice hits, sacrifice fl
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Each team's win percentage and predicted win percentage are plotted in the above bar chart. The true percentages are in red, and the predicted percentages are in blue. On bars where the top section is red, this means that the true win percentage of the team was greater than the predicted win percentage. Oppositely, bars where the top section is blue mean that the team's true win percentage was lower than the predicted win percentage. Bars with large blue or red sections at the top are where the model was least accurate, whereas bars like ARI and WSN where the non-purple section is almost too small to see are where the model was most accurate.</p>
 <p>Of course, the data we fed the model was not perfectly accurate so we cannot expect perfect results. For example, the Los Angeles Dodgers' real win percentage of .717 would have them winning 116 games over a full and normal, season, which would tie the all time record. This shows how unrealistic model's prediction of a .737 win percentage is (equates to 119 wins). This prediction error is due to both the unavoidable imperfection of the model, as well as how we applied a constant scalar of 2.7 to every counting stat to extrapolate those numbers over a full season to increase compatibilty with our model.</p>
-<h2 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h2><p>Both the linear and logistic regression models that were based on both pitching and batting data proved to be the most accurate. This does make a lot of sense, since the success of an MLB team depends on a lot more factors than just batting average, OBP, ERA, or WHIP. A team with one player with an insane OBP could bring the team average up a lot and lead the one-factor models to very incorrectly predict that team's success (for example, consider the <a href="https://www.baseball-reference.com/teams/WSN/2015.shtml">2015 Washington Nationals</a>, where <a href="https://www.baseball-reference.com/players/h/harpebr03.shtml">Bryce Harper</a> had a .460 (!!!) on base percentage, but the next highest OBP on the team was .375).</p>
+<h2 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h2><p>The linear and logistic regression models that were based on both pitching and batting data proved to be the most accurate. This does make a lot of sense, since the success of an MLB team depends on a lot more factors than just batting average, OBP, ERA, or WHIP. A team with one player with an insane OBP could bring the team average up a lot and lead the one-factor models to very incorrectly predict that team's success (for example, consider the <a href="https://www.baseball-reference.com/teams/WSN/2015.shtml">2015 Washington Nationals</a>, where <a href="https://www.baseball-reference.com/players/h/harpebr03.shtml">Bryce Harper</a> had a .460 (!!!) on base percentage, but the next highest OBP on the team was .375).</p>
 <h1 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h1><p>When we created linear and logistic regression models based on many batting and pitching numbers, we were able to predict a team's win total and if they finished top-two in their division with 89% and 85% accuracy, respectively. These models are of course imperfect, but they give insight into how helpful and important data science can be in the baseball world.</p>
-<p>If you would like to read more about the influence of statistics in baseball, a great jumping off point would the the Moneyball movie and book mentioned in the introduction. Below I provide some links to sites like the Society for American Baseball Research (SABR) and Baseball Reference, as well as the MLB.com page on ZiPS projections for further learning.</p>
+<p>If you would like to read more about the influence of statistics in baseball, a great jumping off point would the the Moneyball movie and book mentioned in the introduction. Below I provide some links to sites like the Society for American Baseball Research (SABR) and Baseball Reference, as well as the MLB.com page on ZiPS projections (regarded as one of the best projections in the industry) for further learning.</p>
 <ul>
 <li><a href="https://sabr.org/sabermetrics">Society for American Baseball Research (SABR)</a></li>
 <li><a href="https://www.baseball-reference.com/">Baseball Reference</a></li>
@@ -16185,6 +16184,19 @@ which is imperfect since this data does not include sacrifice hits, sacrifice fl
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
     </div>
   </div>
